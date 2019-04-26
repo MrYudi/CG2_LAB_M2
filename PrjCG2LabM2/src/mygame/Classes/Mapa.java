@@ -5,20 +5,35 @@
  */
 package mygame.Classes;
 
+import com.jme3.asset.AssetManager;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.shape.Box;
+
 /**
  *
  * @author Yudi-PC
  */
 public class Mapa 
 {     
+    private AssetManager assetManager;
+    private Node pisos = new Node();
+
+    public Mapa(AssetManager assetManager, Node rootNode) {
+        this.assetManager = assetManager;
+        rootNode.attachChild(pisos);
+    }
+    
     //Pede para gerar o mapa X
     public void gerarMapa(int id)
     {
-        double[][] listaInfo = infoMapa(id);
+        float[][] listaInfo = infoMapa(id);
         renderizar(listaInfo);
     }
     
-    public double[][] infoMapa(int id)
+    public float[][] infoMapa(int id)
     {
         try
         {
@@ -45,9 +60,9 @@ public class Mapa
     //Retorna uma lista com os dados da coordenada X,Y,Z 
     //(Foram separado numa funcao para diminui a complexidade)
     //OBS.: primeiro => inicio e Segundo => fim
-    private double[][] m1() 
+    private float[][] m1() 
     {
-        double[][] temp = 
+        float[][] temp = 
         {{0,0,0},
         {2,0,0},
         {1,0,0},
@@ -72,9 +87,9 @@ public class Mapa
         return temp;
     }
     
-    private double[][] m2() 
+    private float[][] m2() 
     {
-        double[][] temp = 
+        float[][] temp = 
         {{0,0,0},
         {5,1,0},
         {1,0,0},
@@ -116,44 +131,56 @@ public class Mapa
     //OBS.: listaInfo: 
     //o primeiro => inicio 
     //o segundo => fim
-    private void renderizar(double[][] listaInfo) 
+    private void renderizar(float[][] listaInfo) 
     {
         for (int i = 0; i < listaInfo.length; i++) 
-        {
-            //gl.glTranslated(listaInfo[i][0],listaInfo[i][1],listaInfo[i][2]);
-            gerarPiso(i);
+        {            
+            Geometry g = gerarPiso(i);
+            g.move(listaInfo[i][0],listaInfo[i][1],listaInfo[i][2]);
         }
     }
     
     //Cria um piso neste ponto (0-> inicio, 1-> fim, 2ou+->piso)
-    private void gerarPiso(int tipo)
+    private Geometry gerarPiso(int tipo)
     {
         //gl.glPushMatrix();
+                                
+            float temp = 0.45f; // Use esta variavel para muda o tamanho
+                        
+            Box b = new Box(temp, temp, 0);
+            Geometry geom = new Geometry("Box", b);
+            Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            geom.setMaterial(mat);
+
+            pisos.attachChild(geom);
             
-            switch(tipo)
+            switch(tipo) // seleciona a cor
             {
                 case 0: //Inicio
-                    //gl.glColor3f(0.0f, 0.0f, 1.0f);
+                    mat.setColor("Color", ColorRGBA.Blue);
                 break;
 
                 case 1: //Fim
-                    //gl.glColor3f(1.0f, 0.0f, 0.0f);
+                    mat.setColor("Color", ColorRGBA.Red);
                 break;
 
                 default: //Piso Qualquer
-                    //gl.glColor3f(1.0f, 1.0f, 0f);
+                    mat.setColor("Color", ColorRGBA.Yellow);
             }
-            // Desenha um quadrado preenchido com a cor corrente
-            
-            double temp = 0.45; // Use esta variavel para muda o tamanho
-            /*gl.glBegin(GL2.GL_QUADS);
-                      gl.glVertex3d(temp,temp,0);
-                      gl.glVertex3d(-temp,temp,0);
-                      gl.glVertex3d(-temp,-temp,0);
-                      gl.glVertex3d(temp,-temp,0);               
-            gl.glEnd();*/
+           
+            return geom;
             //talvez seja ideal: Diminui um pouco ou fazer uma borda
         //gl.glPopMatrix();
     }
+    
+    public Node getPisos() {
+        return pisos;
+    }
+
+    public void setPisos(Node pisos) {
+        this.pisos = pisos;
+    }
+    
+    
     
 }

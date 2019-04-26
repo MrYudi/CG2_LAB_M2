@@ -6,8 +6,6 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
-import javax.swing.JOptionPane;
-import mygame.Classes.Cubo;
 import mygame.Classes.Mapa;
 
 /**
@@ -18,23 +16,20 @@ import mygame.Classes.Mapa;
 public class Main extends SimpleApplication {
     
     //private Cubo c = new Cubo();
-    //private Mapa m = new Mapa();
+    private Mapa m;
+    private int mapaAtual = 2;
 
     public static void main(String[] args) {
         Main app = new Main();
+        app.showSettings = false;
         app.start();
     }
 
     @Override
     public void simpleInitApp() {
-        /*Box b = new Box(1, 1, 1);
-        Geometry geom = new Geometry("Box", b);
-
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
-        geom.setMaterial(mat);
-
-        rootNode.attachChild(geom);*/
+        m = new Mapa(assetManager,rootNode);
+        
+        m.gerarMapa(mapaAtual);
         
         
     }
