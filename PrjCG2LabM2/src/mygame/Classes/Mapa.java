@@ -148,7 +148,7 @@ public class Mapa
             float temp = 0.45f; // Use esta variavel para muda o tamanho
                         
             Box b = new Box(temp, temp, 0);
-            Geometry geom = new Geometry("Box", b);
+            Geometry geom = new Geometry("Piso"+tipo, b);
             Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             geom.setMaterial(mat);
 

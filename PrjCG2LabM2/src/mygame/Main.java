@@ -1,12 +1,8 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.shape.Box;
-import mygame.Classes.Mapa;
+import mygame.Classes.*;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -15,7 +11,7 @@ import mygame.Classes.Mapa;
  */
 public class Main extends SimpleApplication {
     
-    //private Cubo c = new Cubo();
+    private Cubo c;
     private Mapa m;
     private int mapaAtual = 2;
 
@@ -26,12 +22,13 @@ public class Main extends SimpleApplication {
     }
 
     @Override
-    public void simpleInitApp() {
+    public void simpleInitApp() 
+    {
         m = new Mapa(assetManager,rootNode);
+        c = new Cubo(assetManager,rootNode);
         
         m.gerarMapa(mapaAtual);
-        
-        
+        c.gerarCubo(1);
     }
 
     @Override

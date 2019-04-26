@@ -5,12 +5,27 @@
  */
 package mygame.Classes;
 
+import com.jme3.asset.AssetManager;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.shape.Box;
+
 /**
  *
  * @author Yudi-PC
  */
 public class Cubo 
 {
+    private AssetManager assetManager;
+    private Node nodeCubo = new Node();
+
+    public Cubo(AssetManager assetManager, Node rootNode) {
+        this.assetManager = assetManager;
+        rootNode.attachChild(nodeCubo);
+    }
+    
     private boolean cima = true;
     private boolean baixo = false;
     private boolean direita = false;
@@ -35,46 +50,86 @@ public class Cubo
         {  
             anima(lado);
         }
+        
 
-        //defineCor(cima);
-        cima();
+        defineCor(cima,cima());
 
-        //defineCor(frente);
-        frente();
+        defineCor(direita,direita());
+        
+        defineCor(baixo, baixo());
+        
+        defineCor(frente,frente());
 
-        //defineCor(direita);
-        direita();
+        defineCor(atras,tras());
 
-        //defineCor(atras);
-        tras();
+        defineCor(esquerda,esquerda());
 
-        //defineCor(esquerda);
-        esquerda();
-
-        //defineCor(baixo);
-        baixo();
+        //nodeCubo.move(0,0,0.01f); //apenas para nao encosta
             
     }
    
     //Criação das faces do cubo
     //----------------------------------------------------------------
     
-    private void cima(){
-    }
-    
-    private void direita(){
-    }
-    
-    private void baixo(){
-    }
-    
-    private void esquerda(){
-    }
-    
-    private void frente(){
-    }
-    
-    private void tras(){
+    private Geometry cima(){
+        
+        Box b = new Box(0.5f, 0.5f, 0);
+        Geometry geom = new Geometry("cima", b);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        geom.setMaterial(mat);
+        geom.move(0, 0, 1);
+        nodeCubo.attachChild(geom);
+        
+        return geom;
+    }  
+    private Geometry direita(){
+        Box b = new Box(0, 0.5f, 0.5f);
+        Geometry geom = new Geometry("direita", b);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        geom.setMaterial(mat);
+        geom.move(0.5f, 0, 0.5f);
+        nodeCubo.attachChild(geom);
+        
+        return geom;
+    }   
+    private Geometry baixo(){
+        Box b = new Box(0.5f, 0.5f, 0);
+        Geometry geom = new Geometry("baixo", b);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        geom.setMaterial(mat);
+        nodeCubo.attachChild(geom);
+        
+        return geom;
+    }   
+    private Geometry esquerda(){
+        Box b = new Box(0, 0.5f, 0.5f);
+        Geometry geom = new Geometry("esquerda", b);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        geom.setMaterial(mat);
+        geom.move(-0.5f, 0, 0.5f);
+        nodeCubo.attachChild(geom);
+        
+        return geom;
+    }   
+    private Geometry frente(){
+        Box b = new Box(0.5f, 0, 0.5f);
+        Geometry geom = new Geometry("frente", b);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        geom.setMaterial(mat);
+        geom.move(0, 0.5f, 0.5f);
+        nodeCubo.attachChild(geom);
+        
+        return geom;
+    }   
+    private Geometry tras(){
+        Box b = new Box(0.5f, 0, 0.5f);
+        Geometry geom = new Geometry("frente", b);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        geom.setMaterial(mat);
+        geom.move(0, -0.5f, 0.5f);
+        nodeCubo.attachChild(geom);
+        
+        return geom;
     }
         
     //Mover cubos
@@ -160,18 +215,18 @@ public class Cubo
     }
     
     //----------------------------------------------------------------
-    /*private void defineCor(boolean b){
+    private void defineCor(boolean b, Geometry g){
         if (b) 
         {
-           gl.glColor3f(1, 0, 0);
+            g.getMaterial().setColor("Color", ColorRGBA.Red);
         } 
         else 
         {
-           gl.glColor3f(0, 1, 0);
+            g.getMaterial().setColor("Color", ColorRGBA.Green);
         }
-    }*/
+    }
     
-    //1-direita, 2-tras,3-esquerda,4- frente
+    //1-direita, 2-tras, 3-esquerda, 4-frente
     private void mudancaDeFace(int lado)
     {
         System.out.println("Antes da alteração: "+this);
