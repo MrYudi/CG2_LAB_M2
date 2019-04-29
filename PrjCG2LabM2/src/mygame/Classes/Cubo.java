@@ -18,8 +18,8 @@ import com.jme3.scene.shape.Box;
  */
 public class Cubo 
 {
-    private AssetManager assetManager;
-    private Node nodeCubo = new Node();
+    private final AssetManager assetManager;
+    private final Node nodeCubo = new Node();
 
     public Cubo(AssetManager assetManager, Node rootNode) {
         this.assetManager = assetManager;
@@ -33,39 +33,28 @@ public class Cubo
     private boolean atras = false;
     private boolean frente = false;
     
-    private double x = 0;
-    private double y = 0;
-    private final double z = 0.55; // este determina a distancia do cubo em relacao ao mapa
+    /*private float x = 0;
+    private float y = 0;
+    private final float z = 0.55f; // este determina a distancia do cubo em relacao ao mapa*/
     
-    private double i; // usado como axiliar para animação
+    private float i; // usado como axiliar para animação
     
     private boolean animando = false; //é usado como controle de transição entre animar e realmente mover
-    private boolean permitirMovimentacao = false; //auxiliar para avisa a animação foi terminada
+    //private boolean permitirMovimentacao = false; //auxiliar para avisa a animação foi terminada
     
-    public void gerarCubo(int lado)
-    {        
-        //gl.glTranslated(x, y, z);
-
-        if (lado != 0) 
-        {  
-            anima(lado);
-        }
-        
-
+    public void gerarCubo()
+    {           
         defineCor(cima,cima());
 
         defineCor(direita,direita());
         
-        defineCor(baixo, baixo());
+        defineCor(baixo,baixo());
         
         defineCor(frente,frente());
 
         defineCor(atras,tras());
 
-        defineCor(esquerda,esquerda());
-
-        //nodeCubo.move(0,0,0.01f); //apenas para nao encosta
-            
+        defineCor(esquerda,esquerda());           
     }
    
     //Criação das faces do cubo
@@ -135,83 +124,22 @@ public class Cubo
     //Mover cubos
     //----------------------------------------------------------------
     
-    public boolean moverDireita(){
-        if (animando) // animação acabo?
-        {
-            if (permitirMovimentacao) 
-            {
-                animando = false;
-                x += 1;
-                mudancaDeFace(1);
-                return true;
-            }
-        }
-        else
-        {
-            animando = true;
-        }
-        
-        return false;
+    public void moverDireita(){
+        //nodeCubo.move(1, 0, 0);
+        mudancaDeFace(1);
     }
-    public boolean moverEsquerda(){
+    public void moverEsquerda(){
         
-        if (animando) // animação acabo?
-        {
-            if (permitirMovimentacao) 
-            {
-                animando = false;
-                x -= 1;
-                mudancaDeFace(3);
-                return true;
-            }
-        }
-        else
-        {
-            animando = true;
-        }
-        
-        return false;
+        //nodeCubo.move(-1, 0, 0);
+        mudancaDeFace(3);
     }
-    public boolean moverFrente(){
-        
-        if (animando) // animação acabo?
-        {
-            if (permitirMovimentacao) 
-            {
-                animando = false;
-                y += 1;
-                mudancaDeFace(4);
-                return true;
-            }
-        }
-        else
-        {
-            animando = true;
-        }
-        
-        return false;
+    public void moverFrente(){
+        //nodeCubo.move(0, 1, 0);
+        mudancaDeFace(4);
     }
-    public boolean moverTras(){
-        //Primeira vez: permitir animicao e retorna false
-        //Durante animação return false
-        //Fim: realizar a movimentacao
-        
-        if (animando) // animação acabo?
-        {
-            if (permitirMovimentacao) 
-            {
-                animando = false;
-                y -= 1;
-                mudancaDeFace(2);
-                return true;
-            }
-        }
-        else
-        {
-            animando = true;
-        }
-        
-        return false;
+    public void moverTras(){
+        //nodeCubo.move(0, -1, 0);
+        mudancaDeFace(2);
     }
     
     //----------------------------------------------------------------
@@ -351,98 +279,79 @@ public class Cubo
         atras = false;
         frente = false;
 
-        x = 0;
-        y = 0;
+        //x = 0;
+        //y = 0;
 
         i = 0;
 
         animando = false;
-        permitirMovimentacao = false; 
+        //permitirMovimentacao = false; 
     }
     
 
     //Animação 
     //----------------------------------------------------------------
     
-    private void anima(int lado) 
+    public void anima(int lado, float tpf) 
     {
-        i++; //Este valor define a velocidade da animação
-        
+        i += tpf; //Este valor define a velocidade da animação
         switch(lado)
         {
             case 1:
-                animaDireita();
+                animaDireita(tpf);
                 break;
             case 2:
-                animaTras();
+                animaTras(tpf);
                 break;
             case 3:
-                animaEsquerda();
+                animaEsquerda(tpf);
                 break;
             case 4:
-                animaFrente();
+                animaFrente(tpf);
                 break;
             
         }
-                
-        if (i < 90) 
+        
+        if (i < Math.PI/2) 
         {
-            permitirMovimentacao = false;
+            animando = true;
         }
         else
         {
             i = 0;
-            permitirMovimentacao = true;
+            animando = false;
         }
     }
     
-    private void animaDireita() 
-    {
-        /*gl.glTranslated(0.5, 0, -0.5);
-        gl.glRotated(i, 0, 1, 0);
-        gl.glTranslated(-0.5, 0, 0.5);*/
+    private void animaDireita(float tpf) {
+        //nodeCubo.move(0.5f, 0, -0.5f);
+        nodeCubo.rotate(0, tpf, 0);
+        //nodeCubo.move(-0.5f, 0, 0.5f);
     }
-
-    private void animaEsquerda() 
-    {
-        /*gl.glTranslated(-0.5, 0, -0.5);
-        gl.glRotated(-i, 0, 1, 0);
-         gl.glTranslated(0.5, 0, 0.5);*/
+    private void animaEsquerda(float tpf){
+        //nodeCubo.move(-0.5f, 0, -0.5f);
+        nodeCubo.rotate(0, -tpf, 0);
+        //nodeCubo.move(0.5f, 0, 0.5f);
     }
-
-    private void animaFrente() 
-    {
-        /*gl.glTranslated(0, 0.5, -0.5); 
-        gl.glRotated(-i, 1, 0, 0);
-        gl.glTranslated(0, -0.5, 0.5); */
+    private void animaFrente(float tpf){
+        //nodeCubo.move(0, 0.5f, -0.5f);
+        nodeCubo.rotate(-tpf, 0, 0);
+        //nodeCubo.move(0, -0.5f, 0.5f);
     }
-
-    private void animaTras() 
-    {
-        /*gl.glTranslated(0, -0.5, -0.5); 
-        gl.glRotated(i, 1, 0, 0);
-        gl.glTranslated(0, 0.5, 0.5);*/ 
+    private void animaTras(float tpf){
+        //nodeCubo.move(0, -0.5f, -0.5f);
+        nodeCubo.rotate(tpf, 0, 0);
+        //nodeCubo.move(0, 0.5f, 0.5f);
     }
     
     //Get e Set
     //----------------------------------------------------------------
-    public double getX() {
-        return x;
-    }
-    public void setX(double x) {
-        this.x = x;
-    }
-    public double getY() {
-        return y;
-    }
-    public void setY(double y) {
-        this.y = y;
-    }
-    public double getZ() {
-        return z;
-    }
     public boolean isBaixo() {
         return baixo;
+    } 
+
+    public boolean isAnimando() {
+        return animando;
     }
     
     //String
@@ -475,7 +384,7 @@ public class Cubo
             s += "frente="+frente;
         }
         
-        s += ", x=" + x + ", y=" + y + ", z=" + z + '}';
+        s += ", x=" + nodeCubo.getLocalTranslation().x + ", y=" + nodeCubo.getLocalTranslation().y + ", z=" + nodeCubo.getLocalTranslation().z + '}';
         
         return s;
     }    
