@@ -5,7 +5,11 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
+import java.util.Locale;
+import javax.swing.JOptionPane;
 import mygame.Classes.*;
 
 
@@ -29,6 +33,8 @@ public class Main extends SimpleApplication{
     public void simpleInitApp() 
     {
         controle();
+        //cam.setLocation(new Vector3f(-1, -1, 5));
+        //cam.setRotation(new Quaternion(0, 0, 0, 0));
         
         viewPort.setBackgroundColor(ColorRGBA.DarkGray);
         
@@ -43,7 +49,7 @@ public class Main extends SimpleApplication{
     public void simpleUpdate(float tpf) {
         if (auxAnimacao != 0) 
         {
-            c.anima(auxAnimacao, tpf);
+            c.anima(auxAnimacao, tpf*2);
             
             if (!c.isAnimando()) 
             {
@@ -64,6 +70,20 @@ public class Main extends SimpleApplication{
                 }
                 
                 auxAnimacao = 0;
+                
+                c.gerarCubo(); 
+                
+                
+                if(VerificarDerrota())
+                {
+                    renicia();
+                }
+                
+                if (VerificarVitoria()) 
+                {
+                    trocaDeMapa();
+                    renicia();
+                }
             }
         }
         
@@ -72,18 +92,6 @@ public class Main extends SimpleApplication{
     @Override
     public void simpleRender(RenderManager rm) {
         //TODO: add render code
-    }
-    
-    private void controle() {
-        inputManager.addMapping("Right",   new KeyTrigger(KeyInput.KEY_L));
-        inputManager.addMapping("Up",  new KeyTrigger(KeyInput.KEY_I));
-        inputManager.addMapping("Left",   new KeyTrigger(KeyInput.KEY_J));
-        inputManager.addMapping("Down",  new KeyTrigger(KeyInput.KEY_K));
-        
-        inputManager.addListener(actionListener, "Right");
-        inputManager.addListener(actionListener, "Left");
-        inputManager.addListener(actionListener, "Up");
-        inputManager.addListener(actionListener, "Down");
     }
     
     private final ActionListener actionListener = new ActionListener() {
@@ -107,13 +115,24 @@ public class Main extends SimpleApplication{
             }
         }
     };
+       
+    private void controle() {
+        inputManager.addMapping("Right",   new KeyTrigger(KeyInput.KEY_L));
+        inputManager.addMapping("Up",  new KeyTrigger(KeyInput.KEY_I));
+        inputManager.addMapping("Left",   new KeyTrigger(KeyInput.KEY_J));
+        inputManager.addMapping("Down",  new KeyTrigger(KeyInput.KEY_K));
         
+        inputManager.addListener(actionListener, "Right");
+        inputManager.addListener(actionListener, "Left");
+        inputManager.addListener(actionListener, "Up");
+        inputManager.addListener(actionListener, "Down");
+    }
+    
     //Esta parte ira confirma se o jogador ganhou ou nao
     private boolean VerificarVitoria() 
     {
-        /*double[][] lista = m.infoMapa(selectFase);
+        float[][] lista = m.infoMapa(mapaAtual);
         boolean vitoria = false;
-        verificar = true;
         
         if (lista[1][0] == c.getX() && 
             lista[1][1] == c.getY() &&
@@ -122,23 +141,19 @@ public class Main extends SimpleApplication{
             vitoria = true;
             System.out.println("Foi encontra uma vitoria");
              
-         
-            verificar = false;
             JOptionPane.showMessageDialog(null, "Vitória");
         }
         
-        return vitoria;*/
-        return false;
+        return vitoria;
     }
     
-  
     //Esta parte ira confirma se o jogador derrubou o cubo
     private boolean VerificarDerrota() 
     {
-        /*double[][] lista = m.infoMapa(selectFase);
+        float[][] lista = m.infoMapa(mapaAtual);
         boolean derrota = true;
         
-        for (double[] ds : lista) 
+        for (float[] ds : lista) 
         {
             if (ds[0] == c.getX() && 
                 ds[1] == c.getY()) 
@@ -151,14 +166,30 @@ public class Main extends SimpleApplication{
         
         if (derrota) 
         {
-            verificar = false;
- 
             System.out.println("Foi encontra uma derrota");
-              JOptionPane.showMessageDialog(null, "Game Over");
+            JOptionPane.showMessageDialog(null, "Game Over");
         }
         
-        return derrota;*/
-        return false;
+        return derrota;
+    }
+    
+    private void renicia()
+    {
+        auxAnimacao = 0;
+        rootNode.detachAllChildren();
+        c = new Cubo(assetManager, rootNode);
+        m = new Mapa(assetManager, rootNode);
+        simpleInitApp();
+    }
+
+    private void trocaDeMapa() {
+        
+        mapaAtual++;
+        
+        if (!(mapaAtual < 3))
+        {
+            mapaAtual = 1;
+        }
     }
     
 }

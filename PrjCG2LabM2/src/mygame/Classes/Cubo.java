@@ -125,20 +125,20 @@ public class Cubo
     //----------------------------------------------------------------
     
     public void moverDireita(){
-        //nodeCubo.move(1, 0, 0);
+        nodeCubo.move(1, 0, 0);
         mudancaDeFace(1);
     }
     public void moverEsquerda(){
         
-        //nodeCubo.move(-1, 0, 0);
+        nodeCubo.move(-1, 0, 0);
         mudancaDeFace(3);
     }
     public void moverFrente(){
-        //nodeCubo.move(0, 1, 0);
+        nodeCubo.move(0, 1, 0);
         mudancaDeFace(4);
     }
     public void moverTras(){
-        //nodeCubo.move(0, -1, 0);
+        nodeCubo.move(0, -1, 0);
         mudancaDeFace(2);
     }
     
@@ -298,16 +298,16 @@ public class Cubo
         switch(lado)
         {
             case 1:
-                animaDireita(tpf);
+                //animaDireita(tpf);
                 break;
             case 2:
-                animaTras(tpf);
+                //animaTras(tpf);
                 break;
             case 3:
-                animaEsquerda(tpf);
+                //animaEsquerda(tpf);
                 break;
             case 4:
-                animaFrente(tpf);
+                //animaFrente(tpf);
                 break;
             
         }
@@ -354,6 +354,14 @@ public class Cubo
         return animando;
     }
     
+    public float getX() {
+        return nodeCubo.getLocalTranslation().x;
+    }
+
+    public float getY() {
+        return nodeCubo.getLocalTranslation().y;
+    }
+    
     //String
     //---------------------------------------------------------------
     @Override
@@ -388,5 +396,6 @@ public class Cubo
         
         return s;
     }    
+
 
 }
