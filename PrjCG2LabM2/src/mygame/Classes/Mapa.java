@@ -158,14 +158,17 @@ public class Mapa
             {
                 case 0: //Inicio
                     mat.setColor("Color", ColorRGBA.Blue);
+                    //mat.setTexture("ColorMap", assetManager.loadTexture("Textures/xadrez_a.png"));
                 break;
 
                 case 1: //Fim
                     mat.setColor("Color", ColorRGBA.Red);
+                    //mat.setTexture("ColorMap", assetManager.loadTexture("Textures/xadrez_v.jpg"));
                 break;
 
                 default: //Piso Qualquer
-                    mat.setColor("Color", ColorRGBA.Yellow);
+                    mat.setColor("Color", ColorRGBA.Gray);
+                    //mat.setTexture("ColorMap", assetManager.loadTexture("Textures/xadrez.jpg"));
             }
            
             return geom;

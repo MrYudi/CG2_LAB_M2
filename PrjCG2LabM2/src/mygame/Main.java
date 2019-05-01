@@ -5,10 +5,9 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
-import java.util.Locale;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.shape.Box;
 import javax.swing.JOptionPane;
 import mygame.Classes.*;
 
@@ -43,6 +42,7 @@ public class Main extends SimpleApplication{
         
         m.gerarMapa(mapaAtual);
         c.gerarCubo();
+        
     }
 
     @Override

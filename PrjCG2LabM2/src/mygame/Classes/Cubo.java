@@ -11,6 +11,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
+import com.jme3.texture.Texture;
 
 /**
  *
@@ -144,13 +145,18 @@ public class Cubo
     
     //----------------------------------------------------------------
     private void defineCor(boolean b, Geometry g){
+        
+        
         if (b) 
         {
             g.getMaterial().setColor("Color", ColorRGBA.Red);
+            g.getMaterial().setTexture("ColorMap", assetManager.loadTexture("Textures/box.jpg"));
         } 
         else 
         {
-            g.getMaterial().setColor("Color", ColorRGBA.Green);
+            g.getMaterial().setColor("Color", ColorRGBA.Gray);
+            g.getMaterial().setTexture("ColorMap", assetManager.loadTexture("Textures/box.jpg"));
+            
         }
     }
     
