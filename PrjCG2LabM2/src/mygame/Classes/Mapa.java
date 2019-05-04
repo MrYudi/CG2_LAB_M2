@@ -41,9 +41,11 @@ public class Mapa
             {
                 case 1:
                     return m1();
-
                 case 2:
                     return m2();
+                case 3:
+                    return m3();
+                
             }
 
             throw new UnsupportedOperationException("ERRO - ID mapa incorreto");
@@ -128,6 +130,31 @@ public class Mapa
         return temp;
     }
     
+    private float[][] m3() {
+        float[][] temp = 
+        {{0,0,0},
+        {2,0,0},
+        {1,1,0},
+        {0,1,0},
+        {-1,1,0},
+        {-1,0,0},
+        {-1,-1,0},
+        {0,-1,0},
+        {1,-1,0},
+        {2,1,0},
+        {3,1,0},
+        {3,0,0},
+        {3,-1,0},
+        {2,-1,0}};
+        /*  0 - Entrada, 1 - Saida, 2 - Piso
+                
+                2 2 2 2 2
+                2 0 - 1 2
+                2 2 2 2 2
+        */
+        return temp;
+    }
+    
     //OBS.: listaInfo: 
     //o primeiro => inicio 
     //o segundo => fim
@@ -183,6 +210,8 @@ public class Mapa
     public void setPisos(Node pisos) {
         this.pisos = pisos;
     }
+
+    
     
     
     

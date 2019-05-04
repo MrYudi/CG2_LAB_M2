@@ -205,7 +205,7 @@ public class Main extends SimpleApplication{
         
         mapaAtual++;
         
-        if (!(mapaAtual < 3))
+        if (!(mapaAtual < 4))
         {
             mapaAtual = 1;
         }
