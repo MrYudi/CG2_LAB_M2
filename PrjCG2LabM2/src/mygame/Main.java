@@ -49,30 +49,15 @@ public class Main extends SimpleApplication{
     public void simpleUpdate(float tpf) {
         if (auxAnimacao != 0) 
         {
-            c.anima(auxAnimacao, tpf*2);
+            c.anima(auxAnimacao, tpf*3); //o Multiplo define a velocidade de animação
             
             if (!c.isAnimando()) 
             {
-                switch(auxAnimacao)
-                {
-                    case 1:
-                        c.moverDireita();
-                        break;
-                    case 2:
-                        c.moverTras();
-                        break;
-                    case 3:
-                        c.moverEsquerda();
-                        break;
-                    case 4:
-                        c.moverFrente();
-                        break;
-                }
+                c.moveCubo(auxAnimacao);
                 
                 auxAnimacao = 0;
                 
-                c.gerarCubo(); 
-                
+                c.gerarCubo();
                 
                 if(VerificarDerrota())
                 {

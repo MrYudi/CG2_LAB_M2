@@ -10,8 +10,8 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.jme3.texture.Texture;
 
 /**
  *
@@ -38,13 +38,13 @@ public class Cubo
     private float y = 0;
     private final float z = 0.55f; // este determina a distancia do cubo em relacao ao mapa*/
     
-    private float i; // usado como axiliar para animação
+    private float contadoAnima; // Contador auxiliar para animação
     
     private boolean animando = false; //é usado como controle de transição entre animar e realmente mover
     //private boolean permitirMovimentacao = false; //auxiliar para avisa a animação foi terminada
     
     public void gerarCubo()
-    {           
+    {                   
         defineCor(cima,cima());
 
         defineCor(direita,direita());
@@ -125,45 +125,50 @@ public class Cubo
     //Mover cubos
     //----------------------------------------------------------------
     
-    public void moverDireita(){
+    public void moveCubo(int auxAnimacao) {
+        
+        System.out.println("Antes da alteração: "+this);
+        
+        switch(auxAnimacao)
+        {
+            case 1:
+                moverDireita();
+                break;
+            case 2:
+                moverTras();
+                break;
+            case 3:
+                moverEsquerda();
+                break;
+            case 4:
+                moverFrente();
+                break;
+            default:    
+                throw new UnsupportedOperationException("Move cubo incorreto: "+ auxAnimacao);
+        }
+        System.out.println("Depois da alteração: "+this);
+    }
+    
+    private void moverDireita(){
         nodeCubo.move(1, 0, 0);
         mudancaDeFace(1);
     }
-    public void moverEsquerda(){
+    private void moverEsquerda(){
         
         nodeCubo.move(-1, 0, 0);
         mudancaDeFace(3);
     }
-    public void moverFrente(){
+    private void moverFrente(){
         nodeCubo.move(0, 1, 0);
         mudancaDeFace(4);
     }
-    public void moverTras(){
+    private void moverTras(){
         nodeCubo.move(0, -1, 0);
         mudancaDeFace(2);
     }
     
-    //----------------------------------------------------------------
-    private void defineCor(boolean b, Geometry g){
-        
-        
-        if (b) 
-        {
-            g.getMaterial().setColor("Color", ColorRGBA.Red);
-            g.getMaterial().setTexture("ColorMap", assetManager.loadTexture("Textures/box.jpg"));
-        } 
-        else 
-        {
-            g.getMaterial().setColor("Color", ColorRGBA.Gray);
-            g.getMaterial().setTexture("ColorMap", assetManager.loadTexture("Textures/box.jpg"));
-            
-        }
-    }
-    
     //1-direita, 2-tras, 3-esquerda, 4-frente
-    private void mudancaDeFace(int lado)
-    {
-        System.out.println("Antes da alteração: "+this);
+    private void mudancaDeFace(int lado){
         
         if (cima) 
         {
@@ -273,11 +278,26 @@ public class Cubo
             throw new UnsupportedOperationException("ERRO - Todas variaveis boolean esta falsa, qual face é a correta?");
         }
         
-        System.out.println("Depois da alteração: "+this);
     }
     
-    public void reniciaValores()
-    {
+    //Outras Funções...
+    //----------------------------------------------------------------
+    private void defineCor(boolean b, Geometry g){
+        
+        
+        if (b) 
+        {
+            g.getMaterial().setColor("Color", ColorRGBA.Red);
+            g.getMaterial().setTexture("ColorMap", assetManager.loadTexture("Textures/box.jpg"));
+        } 
+        else 
+        {
+            g.getMaterial().setColor("Color", ColorRGBA.Gray);
+            g.getMaterial().setTexture("ColorMap", assetManager.loadTexture("Textures/box.jpg"));
+            
+        }
+    }
+    public void reniciaValores() {
         cima = true;
         baixo = false;
         direita = false;
@@ -285,85 +305,159 @@ public class Cubo
         atras = false;
         frente = false;
 
-        //x = 0;
-        //y = 0;
-
-        i = 0;
+        contadoAnima = 0;
 
         animando = false;
-        //permitirMovimentacao = false; 
     }
     
-
     //Animação 
     //----------------------------------------------------------------
     
-    public void anima(int lado, float tpf) 
-    {
-        i += tpf; //Este valor define a velocidade da animação
-        switch(lado)
-        {
+    //Anima direciona qual tipo de animação e faz o controle
+    //Anima**** realiza animação
+    //Desanima**** remove os efeitos da animação (é necessario por causa da logica)
+    
+    public void anima(int lado, float tpf) {
+        contadoAnima += tpf;
+        switch (lado) {
             case 1:
-                //animaDireita(tpf);
+                animaDireita(tpf);
                 break;
             case 2:
-                //animaTras(tpf);
+                animaTras(tpf);
                 break;
             case 3:
-                //animaEsquerda(tpf);
+                animaEsquerda(tpf);
                 break;
             case 4:
-                //animaFrente(tpf);
+                animaFrente(tpf);
                 break;
-            
+
         }
-        
-        if (i < Math.PI/2) 
-        {
+
+        if (contadoAnima < Math.PI / 2) {
             animando = true;
-        }
-        else
-        {
-            i = 0;
+        } else {
+            contadoAnima = 0;
             animando = false;
+
+            switch (lado) {
+                case 1:
+                    desanimaDireita();
+                    break;
+                case 2:
+                    desanimaTras();
+                    break;
+                case 3:
+                    desanimaEsquerda();
+                    break;
+                case 4:
+                    desanimaFrente();
+                    break;
+
+            }
+
         }
     }
     
     private void animaDireita(float tpf) {
-        //nodeCubo.move(0.5f, 0, -0.5f);
+
+        if (!animando) {
+            nodeCubo.move(0.5f, 0, 0);
+
+            for (Spatial s : nodeCubo.getChildren()) {
+                s.move(-0.5f, 0, 0);
+            }
+        }
+
         nodeCubo.rotate(0, tpf, 0);
-        //nodeCubo.move(-0.5f, 0, 0.5f);
     }
-    private void animaEsquerda(float tpf){
-        //nodeCubo.move(-0.5f, 0, -0.5f);
+    private void animaEsquerda(float tpf) {
+
+        if (!animando) {
+            nodeCubo.move(-0.5f, 0, 0);
+
+            for (Spatial s : nodeCubo.getChildren()) {
+                s.move(0.5f, 0, 0);
+            }
+        }
+
         nodeCubo.rotate(0, -tpf, 0);
-        //nodeCubo.move(0.5f, 0, 0.5f);
     }
-    private void animaFrente(float tpf){
-        //nodeCubo.move(0, 0.5f, -0.5f);
+    private void animaFrente(float tpf) {
+
+        if (!animando) {
+            nodeCubo.move(0, 0.5f, 0);
+
+            for (Spatial s : nodeCubo.getChildren()) {
+                s.move(0, -0.5f, 0);
+            }
+        }
+
         nodeCubo.rotate(-tpf, 0, 0);
-        //nodeCubo.move(0, -0.5f, 0.5f);
     }
-    private void animaTras(float tpf){
-        //nodeCubo.move(0, -0.5f, -0.5f);
+    private void animaTras(float tpf) {
+
+        if (!animando) {
+            nodeCubo.move(0, -0.5f, 0);
+
+            for (Spatial s : nodeCubo.getChildren()) {
+                s.move(0, 0.5f, 0);
+            }
+        }
+
         nodeCubo.rotate(tpf, 0, 0);
-        //nodeCubo.move(0, 0.5f, 0.5f);
     }
-    
+
+    private void desanimaDireita() {
+
+        for (Spatial s : nodeCubo.getChildren()) {
+            s.move(0.5f, 0, 0);
+        }
+        nodeCubo.move(-0.5f, 0, 0);
+
+        nodeCubo.rotate(0, (float) (-Math.PI / 2), 0);
+
+    }
+    private void desanimaEsquerda() {
+
+        for (Spatial s : nodeCubo.getChildren()) {
+            s.move(-0.5f, 0, 0);
+        }
+        nodeCubo.move(0.5f, 0, 0);
+
+        nodeCubo.rotate(0, (float) (Math.PI / 2), 0);
+    }
+    private void desanimaFrente() {
+
+        for (Spatial s : nodeCubo.getChildren()) {
+            s.move(0, 0.5f, 0);
+        }
+        nodeCubo.move(0, -0.5f, 0);
+
+        nodeCubo.rotate((float) (Math.PI / 2), 0, 0);
+    }
+    private void desanimaTras() {
+
+        for (Spatial s : nodeCubo.getChildren()) {
+            s.move(0, -0.5f, 0);
+        }
+        nodeCubo.move(0, 0.5f, 0);
+
+        nodeCubo.rotate((float) (-Math.PI / 2), 0, 0);
+    }
+
     //Get e Set
     //----------------------------------------------------------------
     public boolean isBaixo() {
         return baixo;
     } 
-
     public boolean isAnimando() {
         return animando;
-    }
-    
+    }   
     public float getX() {
         return nodeCubo.getLocalTranslation().x;
     }
-
     public float getY() {
         return nodeCubo.getLocalTranslation().y;
     }
@@ -402,6 +496,5 @@ public class Cubo
         
         return s;
     }    
-
 
 }
