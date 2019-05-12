@@ -18,7 +18,7 @@ public class Main extends SimpleApplication{
     
     private Cubo c;
     private Mapa m;
-    private int mapaAtual = 1; // Defini qual é o mapa atual que deve ser gerado
+    private int mapaAtual = 1; // Defini qual é o mapa atual que deve ser gerado (4 é um novo)
     private int auxAnimacao = 0; //Variavel auxiliar para controle de animação (0 - parado; 1,2,3,4 - Em animação e qual tipo)
     private int auxCamera = 1; // Auxiliar camera, que tem pre-configurações
     
@@ -38,6 +38,7 @@ public class Main extends SimpleApplication{
         
         m.gerarMapa(mapaAtual);
         c.gerarCubo();
+        c.getNodeCubo().setLocalTranslation(m.getListaInfo()[0][0],m.getListaInfo()[0][1],m.getListaInfo()[0][2]);
         
         camera(auxCamera);
         controle();
@@ -63,13 +64,13 @@ public class Main extends SimpleApplication{
                 
                 if(VerificarDerrota())
                 {
-                    renicia();
+                    renicia(false);
                 }
                 
                 if (VerificarVitoria()) 
                 {
                     trocaDeMapa();
-                    renicia();
+                    renicia(true);
                 }
             }
         }
@@ -107,6 +108,13 @@ public class Main extends SimpleApplication{
                     auxCamera = 2;
                     camera(auxCamera);
                 }
+                if (name.equals("Restart") && !keyPressed) {
+                    renicia(false);
+                }
+                if (name.equals("Gera") && !keyPressed) {
+                    mapaAtual = 4;
+                    renicia(true);
+                }
             }
         }
     };
@@ -118,6 +126,8 @@ public class Main extends SimpleApplication{
         inputManager.addMapping("Down",  new KeyTrigger(KeyInput.KEY_K));
         inputManager.addMapping("Camera1",  new KeyTrigger(KeyInput.KEY_U));
         inputManager.addMapping("Camera2",  new KeyTrigger(KeyInput.KEY_O));
+        inputManager.addMapping("Restart",  new KeyTrigger(KeyInput.KEY_R));
+        inputManager.addMapping("Gera",  new KeyTrigger(KeyInput.KEY_T));
         
         inputManager.addListener(actionListener, "Right");
         inputManager.addListener(actionListener, "Left");
@@ -125,6 +135,8 @@ public class Main extends SimpleApplication{
         inputManager.addListener(actionListener, "Down");
         inputManager.addListener(actionListener, "Camera1");
         inputManager.addListener(actionListener, "Camera2");
+        inputManager.addListener(actionListener, "Restart");
+        inputManager.addListener(actionListener, "Gera");
     }
     
     private void camera(int i) {
@@ -149,7 +161,7 @@ public class Main extends SimpleApplication{
     //Esta parte ira confirma se o jogador ganhou ou nao
     private boolean VerificarVitoria() 
     {
-        float[][] lista = m.infoMapa(mapaAtual);
+        float[][] lista = m.getListaInfo();
         boolean vitoria = false;
         
         if (lista[1][0] == c.getX() && 
@@ -168,7 +180,7 @@ public class Main extends SimpleApplication{
     //Esta parte ira confirma se o jogador derrubou o cubo
     private boolean VerificarDerrota() 
     {
-        float[][] lista = m.infoMapa(mapaAtual);
+        float[][] lista = m.getListaInfo();
         boolean derrota = true;
         
         for (float[] ds : lista) 
@@ -191,24 +203,38 @@ public class Main extends SimpleApplication{
         return derrota;
     }
     
-    private void renicia()
+    private void renicia(Boolean vitoria)
     {
         auxAnimacao = 0;
         auxCamera = 1;
-        rootNode.detachAllChildren();
-        c = new Cubo(assetManager, rootNode);
-        m = new Mapa(assetManager, rootNode);
-        simpleInitApp();
+        
+        if (vitoria) //Reinicia todos valores
+        {
+            rootNode.detachAllChildren();
+            simpleInitApp();
+        }
+        else //Reinicia somente os valores iniciais (Usado principalmente em Geração de mapa)
+        {
+            c.getNodeCubo().removeFromParent();
+            
+            c = new Cubo(assetManager,rootNode);
+            c.gerarCubo();
+            c.getNodeCubo().setLocalTranslation(m.getListaInfo()[0][0],m.getListaInfo()[0][1],m.getListaInfo()[0][2]);
+            camera(auxCamera);
+        }
+        
+        System.out.println("*** Jogo reiniciado ***");
     }
 
     private void trocaDeMapa() {
         
         mapaAtual++;
         
-        if (!(mapaAtual < 4))
+        if (!(mapaAtual < 5))
         {
-            mapaAtual = 1;
+            mapaAtual = 4;
         }
+        System.out.println("Mapa trocado para: "+mapaAtual);
     }
     
 }

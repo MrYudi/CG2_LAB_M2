@@ -461,6 +461,10 @@ public class Cubo
     public float getY() {
         return nodeCubo.getLocalTranslation().y;
     }
+    public Node getNodeCubo() {
+        return nodeCubo;
+    }
+    
     
     //String
     //---------------------------------------------------------------

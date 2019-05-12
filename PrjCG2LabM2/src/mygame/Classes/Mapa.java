@@ -20,6 +20,7 @@ public class Mapa
 {     
     private AssetManager assetManager;
     private Node pisos = new Node();
+    private float[][] listaInfo;
 
     public Mapa(AssetManager assetManager, Node rootNode) {
         this.assetManager = assetManager;
@@ -29,11 +30,11 @@ public class Mapa
     //Pede para gerar o mapa X
     public void gerarMapa(int id)
     {
-        float[][] listaInfo = infoMapa(id);
+        listaInfo = infoMapa(id);
         renderizar(listaInfo);
     }
     
-    public float[][] infoMapa(int id)
+    private float[][] infoMapa(int id)
     {
         try
         {
@@ -45,7 +46,8 @@ public class Mapa
                     return m2();
                 case 3:
                     return m3();
-                
+                case 4:
+                    return criaMapa();
             }
 
             throw new UnsupportedOperationException("ERRO - ID mapa incorreto");
@@ -57,7 +59,6 @@ public class Mapa
         
         return null;
     }
-    
     
     //Retorna uma lista com os dados da coordenada X,Y,Z 
     //(Foram separado numa funcao para diminui a complexidade)
@@ -155,6 +156,11 @@ public class Mapa
         return temp;
     }
     
+    private float[][] criaMapa() 
+    {
+        return new GeraMapa().criaMapa();
+    }
+    
     //OBS.: listaInfo: 
     //o primeiro => inicio 
     //o segundo => fim
@@ -203,16 +209,15 @@ public class Mapa
         //gl.glPopMatrix();
     }
     
+    //-------------------------------------------------------------------------------
+    //Get e Set
+    
     public Node getPisos() {
         return pisos;
     }
 
-    public void setPisos(Node pisos) {
-        this.pisos = pisos;
-    }
-
-    
-    
-    
+    public float[][] getListaInfo() {
+        return listaInfo;
+    }    
     
 }
