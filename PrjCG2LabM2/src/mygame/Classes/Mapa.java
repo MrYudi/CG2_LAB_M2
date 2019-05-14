@@ -175,38 +175,33 @@ public class Mapa
     
     //Cria um piso neste ponto (0-> inicio, 1-> fim, 2ou+->piso)
     private Geometry gerarPiso(int tipo)
-    {
-        //gl.glPushMatrix();
-                                
-            float temp = 0.45f; // Use esta variavel para muda o tamanho
-                        
-            Box b = new Box(temp, temp, 0);
-            Geometry geom = new Geometry("Piso"+tipo, b);
-            Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            geom.setMaterial(mat);
+    {                                
+        float temp = 0.5f; // Use esta variavel para muda o tamanho
 
-            pisos.attachChild(geom);
-            
-            switch(tipo) // seleciona a cor
-            {
-                case 0: //Inicio
-                    mat.setColor("Color", ColorRGBA.Blue);
-                    //mat.setTexture("ColorMap", assetManager.loadTexture("Textures/xadrez_a.png"));
-                break;
+        Box b = new Box(temp, temp, 0);
+        Geometry geom = new Geometry("Piso"+tipo, b);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        geom.setMaterial(mat);
 
-                case 1: //Fim
-                    mat.setColor("Color", ColorRGBA.Red);
-                    //mat.setTexture("ColorMap", assetManager.loadTexture("Textures/xadrez_v.jpg"));
-                break;
+        pisos.attachChild(geom);
 
-                default: //Piso Qualquer
-                    mat.setColor("Color", ColorRGBA.Gray);
-                    //mat.setTexture("ColorMap", assetManager.loadTexture("Textures/xadrez.jpg"));
-            }
-           
-            return geom;
-            //talvez seja ideal: Diminui um pouco ou fazer uma borda
-        //gl.glPopMatrix();
+        mat.setTexture("ColorMap", assetManager.loadTexture("Textures/texturaPiso.jpg"));
+
+        switch(tipo) // seleciona a cor
+        {
+            case 0: //Inicio
+                mat.setColor("Color", ColorRGBA.Blue);
+            break;
+
+            case 1: //Fim
+                mat.setColor("Color", ColorRGBA.Red);
+            break;
+
+            default: //Piso Qualquer
+                mat.setColor("Color", ColorRGBA.Gray);
+        }
+
+        return geom;
     }
     
     //-------------------------------------------------------------------------------
