@@ -13,8 +13,8 @@ import java.util.Random;
  */
 public class GeraMapa {
          
-    //Mapas são gerado de 0-5 ou seja 6x6=36
-    //Será colocado apenas 66% do total, ou seja, 24 pisos.
+    //Mapas são gerado de 0-4 ou seja 5x5=25
+    //Será colocado apenas 80% do total.
     //Verifica se existe caminho valido
     private float[][] lista;
     
@@ -36,7 +36,7 @@ public class GeraMapa {
     
     private void geraLista()
     {
-        lista = new float[24][3];
+        lista = new float[((5*5)*4)/5][3];
         
         for (int i = 0; i < lista.length; i++) 
         {
@@ -71,7 +71,7 @@ public class GeraMapa {
     
     private float rand()
     {
-        return (float) new Random().nextInt(6);
+        return (float) new Random().nextInt(5);
     }
 
 }

@@ -1,6 +1,7 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.audio.AudioNode;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -21,6 +22,8 @@ public class Main extends SimpleApplication{
     private int mapaAtual = 1; // Defini qual é o mapa atual que deve ser gerado (4 é um novo)
     private int auxAnimacao = 0; //Variavel auxiliar para controle de animação (0 - parado; 1,2,3,4 - Em animação e qual tipo)
     private int auxCamera = 1; // Auxiliar camera, que tem pre-configurações
+    private AudioNode audioAmbiente;
+    private boolean configuracaoBasica = false; //Usado somente para otimiza e resolve o problema de audio
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -30,9 +33,7 @@ public class Main extends SimpleApplication{
 
     @Override
     public void simpleInitApp() 
-    {
-        viewPort.setBackgroundColor(ColorRGBA.DarkGray);
-        
+    {        
         m = new Mapa(assetManager,rootNode);
         c = new Cubo(assetManager,rootNode);
         
@@ -41,7 +42,13 @@ public class Main extends SimpleApplication{
         c.getNodeCubo().setLocalTranslation(m.getListaInfo()[0][0],m.getListaInfo()[0][1],m.getListaInfo()[0][2]);
         
         camera(auxCamera);
-        controle();
+        
+        if (!configuracaoBasica) {
+            viewPort.setBackgroundColor(ColorRGBA.DarkGray);
+            audio(); //Comente esta linha, caso não queira musica
+            controle();
+            configuracaoBasica = !configuracaoBasica;
+        }
         
     }
 
@@ -235,6 +242,16 @@ public class Main extends SimpleApplication{
             mapaAtual = 4;
         }
         System.out.println("Mapa trocado para: "+mapaAtual);
+    }
+
+    private void audio() {
+        audioAmbiente = new AudioNode(assetManager, "Sound/AudioAmbiente.wav");
+        audioAmbiente.setVolume(0.1f);
+        audioAmbiente.setPositional(false);
+        audioAmbiente.setLooping(true);
+        audioAmbiente.playInstance();
+        rootNode.attachChild(audioAmbiente);
+        audioAmbiente.play();
     }
     
 }
