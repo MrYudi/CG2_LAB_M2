@@ -22,6 +22,10 @@ public class Cubo
     private final AssetManager assetManager;
     private final Node nodeCubo = new Node();
 
+    public Cubo() {
+        this.assetManager = null;
+    }
+    
     public Cubo(AssetManager assetManager, Node rootNode) {
         this.assetManager = assetManager;
         rootNode.attachChild(nodeCubo);

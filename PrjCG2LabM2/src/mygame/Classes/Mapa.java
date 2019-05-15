@@ -30,7 +30,7 @@ public class Mapa
     //Pede para gerar o mapa X
     public void gerarMapa(int id)
     {
-        listaInfo = infoMapa(id);
+        listaInfo = infoMapa(id);        
         renderizar(listaInfo);
     }
     

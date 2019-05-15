@@ -5,6 +5,8 @@
  */
 package mygame.Classes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -16,27 +18,54 @@ public class GeraMapa {
     //Mapas são gerado de 0-4 ou seja 5x5=25
     //Será colocado apenas 80% do total.
     //Verifica se existe caminho valido
-    private float[][] lista;
     
     public float[][] criaMapa()
     {
-        do
-        {
-            geraLista();
-        }while(!temCaminhoValido());
+        return geraLista();
+    }
+    
+    
+    private float[][] geraLista()
+    {
+        List<float[]> lista = new ArrayList<float[]>();
+        Cubo c = new Cubo();
+        float[] saida = null;
         
-        return lista;
-    }
-    
-    private boolean temCaminhoValido() 
-    {
-        //algoritmo Vertical (Estrutura de dados)
-        return true;
-    }
-    
-    private void geraLista()
-    {
-        lista = new float[((5*5)*4)/5][3];
+        //Gera o mapa 
+        lista.add(new float[]{0,0,0});
+        
+        for (int i = 0; i < 30 || saida == null; i++) 
+        {
+            c.moveCubo(new Random().nextInt(4) + 1);
+            lista.add(new float[]{c.getX(),c.getY(),0});
+            
+            if (c.isBaixo()) 
+            {
+                System.out.println("mygame.Classes.GeraMapa.geraLista()");
+                saida = new float[]{c.getX(),c.getY(),0};
+            }
+        }
+        lista.add(1, saida);
+        
+        
+        
+        //Converter Lista Para Matriz
+        
+        float[][] listaMatriz = new float[lista.size()][3];
+        
+        for (int i = 0; i < listaMatriz.length; i++) {
+            
+            if (temEstePonto(listaMatriz,listaMatriz[i])) 
+            {
+                listaMatriz[i][0] = lista.get(i)[0];
+                listaMatriz[i][1] = lista.get(i)[1];
+                listaMatriz[i][2] = lista.get(i)[2];
+            }
+        }
+        
+        return listaMatriz;
+        
+        /*lista = new float[((5*5)*4)/5][3];
         
         for (int i = 0; i < lista.length; i++) 
         {
@@ -48,15 +77,15 @@ public class GeraMapa {
             }while (temEstePonto(ponto));
             
             lista[i] = ponto;
-        }
+        }*/
     }
     
-    private boolean temEstePonto(float[] ponto)
+    private boolean temEstePonto(float[][] lista, float[] ponto)
     {
-        for (float[] lista1 : lista) {
-            if (lista1[0] == ponto[0] && lista1[1] == ponto[1] && lista1[2] == ponto[2]) {
+        for (int i = 0; i < lista.length; i++){
+            
+            if (lista[i][0] == ponto[0] && lista[i][1] == ponto[1] && lista[i][2] == ponto[2]) {
                 return true;
-               
             }
         }
         
