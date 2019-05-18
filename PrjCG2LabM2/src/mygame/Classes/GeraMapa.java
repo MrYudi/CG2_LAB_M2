@@ -41,21 +41,24 @@ public class GeraMapa {
             
             if (c.isBaixo()) 
             {
-                System.out.println("mygame.Classes.GeraMapa.geraLista()");
                 saida = new float[]{c.getX(),c.getY(),0};
             }
         }
+        
+        if (saida == null) 
+        {
+            throw new Error("Gerador de Mapa: Saida nula");
+        }
+        
         lista.add(1, saida);
         
-        
-        
-        //Converter Lista Para Matriz
+        //Converter Lista Para Matriz e remove repetidos
         
         float[][] listaMatriz = new float[lista.size()][3];
         
-        for (int i = 0; i < listaMatriz.length; i++) {
+        for (int i = 0; i < lista.size(); i++) {
             
-            if (temEstePonto(listaMatriz,listaMatriz[i])) 
+            if (!temEstePonto(listaMatriz,listaMatriz[i])) //verificar esta parte
             {
                 listaMatriz[i][0] = lista.get(i)[0];
                 listaMatriz[i][1] = lista.get(i)[1];
@@ -82,13 +85,11 @@ public class GeraMapa {
     
     private boolean temEstePonto(float[][] lista, float[] ponto)
     {
-        for (int i = 0; i < lista.length; i++){
-            
-            if (lista[i][0] == ponto[0] && lista[i][1] == ponto[1] && lista[i][2] == ponto[2]) {
+        for (float[] lista1 : lista) {
+            if (lista1[0] == ponto[0] && lista1[1] == ponto[1] && lista1[2] == ponto[2]) {
                 return true;
             }
         }
-        
         return false;
     }
     
