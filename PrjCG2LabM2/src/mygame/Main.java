@@ -230,7 +230,7 @@ public class Main extends SimpleApplication{
             camera(auxCamera);
         }
         
-        System.out.println("*** Jogo reiniciado ***");
+        System.out.println("\n*** Jogo reiniciado ***");
     }
 
     private void trocaDeMapa() {

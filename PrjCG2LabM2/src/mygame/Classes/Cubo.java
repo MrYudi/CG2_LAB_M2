@@ -131,7 +131,7 @@ public class Cubo
     
     public void moveCubo(int auxAnimacao) {
         
-        System.out.println("Antes da alteração: "+this);
+        //System.out.println("Antes da alteração: "+this);
         
         switch(auxAnimacao)
         {

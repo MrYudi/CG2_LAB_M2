@@ -14,32 +14,34 @@ import java.util.Random;
  * @author Yudi-PC
  */
 public class GeraMapa {
-         
-    //Mapas são gerado de 0-4 ou seja 5x5=25
-    //Será colocado apenas 80% do total.
-    //Verifica se existe caminho valido
+    
+    
+    private final int tamanho = 3; // Define os limites do cubo
+    private final int distancia = 30; //Define a quantidade de movimentos do cubo
     
     public float[][] criaMapa()
     {
         return geraLista();
     }
     
-    
     private float[][] geraLista()
     {
-        List<float[]> lista = new ArrayList<float[]>();
+        List<float[]> lista = new ArrayList<>();
         Cubo c = new Cubo();
         float[] saida = null;
+        
+        System.out.println("*** Geracao de mapa ***\n");
         
         //Gera o mapa 
         lista.add(new float[]{0,0,0});
         
-        for (int i = 0; i < 30 || saida == null; i++) 
+        for (int i = 0; i < distancia || saida == null; i++) 
         {
-            c.moveCubo(new Random().nextInt(4) + 1);
+            c.moveCubo(rand(c));
             lista.add(new float[]{c.getX(),c.getY(),0});
             
-            if (c.isBaixo()) 
+            if (c.isBaixo() && 
+               !(c.getX() == lista.get(0)[0] && c.getY()== lista.get(0)[1])) //Evita que a saida esteja na origem
             {
                 saida = new float[]{c.getX(),c.getY(),0};
             }
@@ -58,13 +60,15 @@ public class GeraMapa {
         
         for (int i = 0; i < lista.size(); i++) {
             
-            if (!temEstePonto(listaMatriz,listaMatriz[i])) //verificar esta parte
+            if (!temEstePonto(listaMatriz,lista.get(i)))
             {
                 listaMatriz[i][0] = lista.get(i)[0];
                 listaMatriz[i][1] = lista.get(i)[1];
                 listaMatriz[i][2] = lista.get(i)[2];
             }
         }
+        
+        System.out.println("\n*** Fim da geração de mapa ***");
         
         return listaMatriz;
         
@@ -93,15 +97,45 @@ public class GeraMapa {
         return false;
     }
     
-    private float[] coodenada()
+     
+    private int rand(Cubo c)
     {
-        float[] f = {rand(),rand(),0};
-        return f;
-    }
+        int r = 0;
     
-    private float rand()
-    {
-        return (float) new Random().nextInt(5);
+        do
+        {
+            r = (new Random().nextInt(4) + 1);
+                        
+            switch(r)
+            {
+                case 1:
+                    if (c.getX() < tamanho) 
+                    {
+                        return r;
+                    }                    
+                    break;
+                case 2:
+                    if (-tamanho < c.getY()) 
+                    {
+                        return r;
+                    }                    
+                    break;
+                    
+                case 3:
+                    if (-tamanho < c.getX()) 
+                    {
+                        return r;
+                    }                    
+                    break;
+                    
+                case 4:
+                    if (c.getY() < tamanho) 
+                    {
+                        return r;
+                    }
+                    break;
+            }
+        }while (true);
     }
 
 }
