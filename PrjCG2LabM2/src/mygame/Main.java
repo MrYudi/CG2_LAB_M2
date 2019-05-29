@@ -2,6 +2,7 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.audio.AudioNode;
+import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -47,6 +48,7 @@ public class Main extends SimpleApplication{
             viewPort.setBackgroundColor(ColorRGBA.DarkGray);
             audio(); //Comente esta linha, caso não queira musica
             controle();
+            interface1();
             configuracaoBasica = !configuracaoBasica;
         }
         
@@ -71,11 +73,13 @@ public class Main extends SimpleApplication{
                 
                 if(VerificarDerrota())
                 {
+                    //Musica Derrota
                     renicia(false);
                 }
                 
                 if (VerificarVitoria()) 
                 {
+                    //Musica vitoria
                     trocaDeMapa();
                     renicia(true);
                 }
@@ -125,7 +129,9 @@ public class Main extends SimpleApplication{
             }
         }
     };
-       
+      
+    
+    
     private void controle() {
         inputManager.addMapping("Right",   new KeyTrigger(KeyInput.KEY_L));
         inputManager.addMapping("Up",  new KeyTrigger(KeyInput.KEY_I));
@@ -144,6 +150,31 @@ public class Main extends SimpleApplication{
         inputManager.addListener(actionListener, "Camera2");
         inputManager.addListener(actionListener, "Restart");
         inputManager.addListener(actionListener, "Gera");
+    }
+    
+    private void interface1(){
+        guiNode.detachAllChildren();//node responsavel pela interface
+        guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        BitmapText helloText = new BitmapText(guiFont,false);
+        helloText.setSize(guiFont.getCharSet().getRenderedSize());
+        helloText.setText("Controle do cubo:");
+        helloText.setColor(ColorRGBA.Red);
+        helloText.setLocalTranslation(0, settings.getHeight(), 0);
+        
+        guiNode.attachChild(helloText);
+        
+         BitmapText textTutorial = new BitmapText(guiFont,false);
+        textTutorial.setSize(guiFont.getCharSet().getRenderedSize());
+        textTutorial.setText("Tecla I-para cima\n"
+                            +  "Tecla K- para baixo\n" +
+                               "Tecla L- para direita\n" +
+                                "Tecla J- para esquerda\n");
+        textTutorial.setColor(ColorRGBA.White);
+        textTutorial.setLocalTranslation(0, settings.getHeight() - helloText.getHeight(), 0);
+        
+        guiNode.attachChild(textTutorial);
+         
+    
     }
     
     private void camera(int i) {
