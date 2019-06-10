@@ -173,6 +173,25 @@ public class Main extends SimpleApplication{
         textTutorial.setLocalTranslation(0, settings.getHeight() - helloText.getHeight(), 0);
         
         guiNode.attachChild(textTutorial);
+        
+                BitmapText cameraTitulo = new BitmapText(guiFont,false);
+        cameraTitulo.setSize(guiFont.getCharSet().getRenderedSize());
+        cameraTitulo.setText("Controle câmera:");
+        cameraTitulo.setColor(ColorRGBA.Red);
+        cameraTitulo.setLocalTranslation(0, settings.getHeight() - helloText.getHeight() - textTutorial.getHeight(), 0);
+        
+        guiNode.attachChild(cameraTitulo);
+        
+        BitmapText textTutorialCam = new BitmapText(guiFont,false);
+        textTutorialCam.setSize(guiFont.getCharSet().getRenderedSize());
+        textTutorialCam.setText("Tecla U- câmera1\n"
+                            +  "Tecla O- câmera2\n");
+                             
+        textTutorialCam.setColor(ColorRGBA.White);
+        textTutorialCam.setLocalTranslation(0, settings.getHeight() - helloText.getHeight() - textTutorial.getHeight() - cameraTitulo.getHeight(), 0);
+        
+        guiNode.attachChild(textTutorialCam);
+                 
          
     
     }
