@@ -191,6 +191,24 @@ public class Main extends SimpleApplication{
         textTutorialCam.setLocalTranslation(0, settings.getHeight() - helloText.getHeight() - textTutorial.getHeight() - cameraTitulo.getHeight(), 0);
         
         guiNode.attachChild(textTutorialCam);
+        
+         BitmapText mapaTitulo = new BitmapText(guiFont,false);
+        mapaTitulo.setSize(guiFont.getCharSet().getRenderedSize());
+        mapaTitulo.setText("Controle Mapa:");
+        mapaTitulo.setColor(ColorRGBA.Red);
+        mapaTitulo.setLocalTranslation(0, settings.getHeight() - helloText.getHeight() - textTutorial.getHeight() - cameraTitulo.getHeight() - textTutorialCam.getHeight(), 0);
+        
+        guiNode.attachChild(mapaTitulo);
+        
+        BitmapText textTutorialmap = new BitmapText(guiFont,false);
+        textTutorialmap.setSize(guiFont.getCharSet().getRenderedSize());
+        textTutorialmap.setText("Tecla R- Restart\n"
+                            +  "Tecla T- Gerador de mapa\n");
+                             
+        textTutorialmap.setColor(ColorRGBA.White);
+        textTutorialmap.setLocalTranslation(0, settings.getHeight() - helloText.getHeight() - textTutorial.getHeight() - cameraTitulo.getHeight() - textTutorialCam.getHeight() - mapaTitulo.getHeight(), 0);
+        
+        guiNode.attachChild(textTutorialmap);
                  
          
     
